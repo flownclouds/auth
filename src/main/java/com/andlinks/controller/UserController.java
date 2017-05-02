@@ -43,10 +43,10 @@ public class UserController extends BaseController {
         return Response.success(userService.findAll());
     }
 
-    @RequestMapping(value = "/{uid}", method = RequestMethod.PUT)
-    public Response update(@PathVariable Long uid, UserDO userDo,Long[] roleIds) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public Response update(@PathVariable Long id, UserDO userDo,Long[] roleIds) {
 
-        userDo.setId(uid);
+        userDo.setId(id);
         userDo.setRoles(roleService.findSet(roleIds));
         return Response.success(userService.update(userDo));
     }

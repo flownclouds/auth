@@ -19,7 +19,7 @@ public class UserToken implements Serializable{
     @Id
     private String userName;
 
-    private String toekn;
+    private String token;
 
     private Set<String> permissions;
 
@@ -33,12 +33,12 @@ public class UserToken implements Serializable{
         this.userName = userName;
     }
 
-    public String getToekn() {
-        return toekn;
+    public String getToken() {
+        return token;
     }
 
-    public void setToekn(String toekn) {
-        this.toekn = toekn;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public Set<String> getPermissions() {
@@ -60,9 +60,9 @@ public class UserToken implements Serializable{
     public UserToken() {
     }
 
-    public UserToken(String userName, String toekn, Set<String> permissions, Date expireDate) {
+    public UserToken(String userName, String token, Set<String> permissions, Date expireDate) {
         this.userName = userName;
-        this.toekn = toekn;
+        this.token = token;
         this.permissions = permissions;
         this.expireDate = expireDate;
     }

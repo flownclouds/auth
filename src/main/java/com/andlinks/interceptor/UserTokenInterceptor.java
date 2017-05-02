@@ -2,7 +2,6 @@ package com.andlinks.interceptor;
 
 import com.andlinks.annotation.Authority;
 import com.andlinks.entity.UserToken;
-import com.andlinks.service.UserService;
 import com.andlinks.service.UserTokenService;
 import com.andlinks.utils.I18nUtils;
 import org.apache.commons.lang.time.DateUtils;
@@ -75,7 +74,7 @@ public class UserTokenInterceptor implements HandlerInterceptor {
                     .forward(request, response);
             return false;
         }
-        if (!tokenCookie.getValue().equals(userToken.getToekn())) {
+        if (!tokenCookie.getValue().equals(userToken.getToken())) {
             request
                     .getRequestDispatcher(String.format("%s=%s", unAuthUrl, I18nUtils.getMessage("Common.Response.Token.Invalid")))
                     .forward(request, response);

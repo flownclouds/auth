@@ -40,10 +40,10 @@ public class PermissionController extends BaseController {
         return Response.success(permissionService.findAll());
     }
 
-    @RequestMapping(value = "/{pid}", method = RequestMethod.PUT)
-    public Response update(@PathVariable Long pid,PermissionDO permissionDO) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public Response update(@PathVariable Long id,PermissionDO permissionDO) {
 
-        permissionDO.setId(pid);
+        permissionDO.setId(id);
         return Response.success(permissionService.update(permissionDO));
     }
 

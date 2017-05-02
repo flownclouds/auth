@@ -45,10 +45,10 @@ public class RoleController extends BaseController {
         return Response.success(roleService.findAll());
     }
 
-    @RequestMapping(value = "/{rid}", method = RequestMethod.PUT)
-    public Response update(@PathVariable Long rid,RoleDO roleDO,Long[] permissionIds) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public Response update(@PathVariable Long id,RoleDO roleDO,Long[] permissionIds) {
 
-        roleDO.setId(rid);
+        roleDO.setId(id);
         roleDO.setPermissions(permissionService.findSet(permissionIds));
         return Response.success(roleService.update(roleDO));
     }
