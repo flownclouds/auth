@@ -34,7 +34,7 @@ public class PermissionDO extends BaseEntity{
         this.permissionNameCN = permissionNameCN;
     }
 
-    @Column(name="perm_name_en",unique = true)
+    @Column(name="perm_name_en")
     public String getPermissionNameEN() {
         return permissionNameEN;
     }

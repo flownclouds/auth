@@ -19,14 +19,16 @@ import java.util.*;
 /**
  * Created by 王凯斌 on 2017/4/24.
  */
-public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T>  {
+public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 
-    /** 更新忽略属性 */
-    private static final String[] UPDATE_IGNORE_PROPERTIES = new String[] {
+    /**
+     * 更新忽略属性
+     */
+    private static final String[] UPDATE_IGNORE_PROPERTIES = new String[]{
             BaseEntity.CREATE_DATE_PROPERTY_NAME,
             BaseEntity.MODIFY_DATE_PROPERTY_NAME,
             BaseEntity.VERSION_PROPERTY_NAME,
-            BaseEntity.DELETED_PROPERTY_NAME };
+            BaseEntity.DELETED_PROPERTY_NAME};
 
     @Autowired
     private BaseDao<T> baseDao;
@@ -71,6 +73,14 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T>  {
     }
 
     @Override
+    public Boolean exists(Long id) {
+        if (id == null) {
+            return false;
+        }
+        return baseDao.exists(id);
+    }
+
+    @Override
     public T save(T t) {
 
         return baseDao.save(t);
@@ -79,24 +89,20 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T>  {
     @Override
     public T update(T t) {
 
-        if(!baseDao.exists(t.getId())){
-            throw new IllegalArgumentException("update target does not exits");
-        }
-        T orginal = baseDao.findOne(t.getId());
-        if (orginal != null) {
-            copyProperties(t, orginal,UPDATE_IGNORE_PROPERTIES);
-        }
-        return baseDao.save(orginal);
+        return update(t, UPDATE_IGNORE_PROPERTIES);
     }
 
     @Override
     public T update(T t, String... ignore) {
 
+        if (!baseDao.exists(t.getId())) {
+            throw new IllegalArgumentException("update target does not exits");
+        }
         T orginal = baseDao.findOne(t.getId());
         if (orginal != null) {
-            copyProperties(t, orginal, ignore);
+            copyProperties(t, orginal, (String[]) ArrayUtils.addAll(ignore, UPDATE_IGNORE_PROPERTIES));
         }
-        return update(orginal);
+        return baseDao.save(orginal);
     }
 
     @SuppressWarnings("unchecked")
@@ -104,7 +110,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T>  {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void delete(T... ts) {
 
-        for(T t:ts){
+        for (T t : ts) {
             delete(t);
         }
     }
@@ -112,6 +118,9 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T>  {
     @Override
     public void delete(T t) {
 
+        if (t == null || !baseDao.exists(t.getId())) {
+            throw new IllegalArgumentException("delete target does not exits");
+        }
         t.setDeleted(true);
         baseDao.save(t);
     }
@@ -158,7 +167,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T>  {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void delete(Long[] ids) {
 
-        for(Long id:ids){
+        for (Long id : ids) {
             delete(id);
         }
     }

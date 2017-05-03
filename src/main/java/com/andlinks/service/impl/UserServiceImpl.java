@@ -19,6 +19,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserDO> implements UserServ
 
     @Override
     public UserDO save(UserDO userDO) {
+        if(findByUserName(userDO.getUserName())!=null){
+            throw new IllegalArgumentException("UserDO save target exits");
+        }
         userDO.setPassword(DigestUtils.md5Hex(userDO.getPassword()));
         return super.save(userDO);
     }
@@ -26,7 +29,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDO> implements UserServ
     @Override
     public UserDO update(UserDO userDO){
         userDO.setPassword(DigestUtils.md5Hex(userDO.getPassword()));
-        return super.update(userDO);
+        return super.update(userDO,"userName");
     }
 
     @Override

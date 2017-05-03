@@ -1,9 +1,14 @@
 package com.andlinks.controller;
 
 import com.andlinks.Response;
+import com.andlinks.annotation.Authority;
 import com.andlinks.entity.UserDO;
 import com.andlinks.service.RoleService;
 import com.andlinks.service.UserService;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +19,7 @@ import javax.annotation.Resource;
 /**
  * Created by 王凯斌 on 2017/4/25.
  */
+@Authority(name = "user")
 @RestController
 @RequestMapping("/user")
 public class UserController extends BaseController {
@@ -24,8 +30,18 @@ public class UserController extends BaseController {
     @Resource(name = "roleServiceImpl")
     private RoleService roleService;
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
-    public Response add(UserDO userDo,Long[] roleIds) {
+    @RequestMapping(method = RequestMethod.POST)
+    public Response add(UserDO userDo, Long[] roleIds) {
+
+        if (StringUtils.isEmpty(userDo.getUserName())) {
+            return Response.error(getMessage("Common.Response.User.UserName.Null"));
+        }
+        if (StringUtils.isEmpty(userDo.getPassword())) {
+            return Response.error(getMessage("Common.Response.User.Password.Null"));
+        }
+        if (userService.findByUserName(userDo.getUserName()) != null) {
+            return Response.error(getMessage("Common.Response.User.Exists"));
+        }
 
         userDo.setRoles(roleService.findSet(roleIds));
         return Response.success(userService.save(userDo));
@@ -34,18 +50,35 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Response find(@PathVariable Long id) {
 
-        return Response.success(userService.find(id));
+        UserDO userDO = userService.find(id);
+        if (userDO == null) {
+            return Response.error(getMessage("Common.Response.User.Missing"));
+        }
+        return Response.success(userDO);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public Response list() {
 
         return Response.success(userService.findAll());
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public Response update(@PathVariable Long id, UserDO userDo,Long[] roleIds) {
+    @RequestMapping(value = "/page", method = RequestMethod.GET)
+    public Response page(@PageableDefault(value = 10, sort = {"id"}, direction = Sort.Direction.ASC)
+                                 Pageable pageable) {
 
+        return Response.success(userService.findPage(pageable));
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public Response update(@PathVariable Long id, UserDO userDo, Long[] roleIds) {
+
+        if (userService.find(id) == null) {
+            return Response.error(getMessage("Common.Response.User.Missing"));
+        }
+        if (StringUtils.isEmpty(userDo.getPassword())) {
+            return Response.error(getMessage("Common.Response.User.Password.Null"));
+        }
         userDo.setId(id);
         userDo.setRoles(roleService.findSet(roleIds));
         return Response.success(userService.update(userDo));

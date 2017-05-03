@@ -12,7 +12,7 @@ public class Response implements Serializable {
 
     private static final long serialVersionUID = -6940155623903430474L;
 
-    private enum Status {
+    public enum Status {
         SUCCESS,
         UN_LOGIN,
         UN_AUTH,

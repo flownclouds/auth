@@ -22,7 +22,7 @@ public class RoleDO extends BaseEntity{
 
     private Set<PermissionDO> permissions;
 
-    @Column(name="role_name",unique = true)
+    @Column(name="role_name")
     public String getRoleName() {
         return roleName;
     }

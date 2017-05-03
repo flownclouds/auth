@@ -20,6 +20,8 @@ public interface BaseService<T extends BaseEntity> {
 
     Set<T> findSet(Long[] ids);
 
+    Boolean exists(Long id);
+
     T save(T t);
 
     T update(T t);

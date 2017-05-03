@@ -42,12 +42,13 @@ public class LoginController extends BaseController {
 
     /**
      * 登陆方法
+     *
      * @param userName
      * @param password
      * @param response
      * @return
      */
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public Response login(String userName, String password, HttpServletResponse response) {
 
         //获得UserDO实体并进行校验

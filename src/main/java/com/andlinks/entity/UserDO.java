@@ -21,7 +21,7 @@ public class UserDO extends BaseEntity{
 
     private Set<RoleDO> roles;
 
-    @Column(name="user_name",unique=true)
+    @Column(name="user_name")
     public String getUserName() {
         return userName;
     }
