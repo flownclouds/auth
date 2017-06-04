@@ -12,4 +12,6 @@ public interface UserTokenService {
     UserToken save(UserToken userToken);
 
     void delete(UserToken userToken);
+
+    void delete(String userName);
 }

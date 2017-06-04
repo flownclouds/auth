@@ -25,7 +25,7 @@ import java.util.Set;
  * Created by 王凯斌 on 2017/4/25.
  */
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/authentication")
 public class LoginController extends BaseController {
 
     @Resource(name = "userTokenImpl")
@@ -84,6 +84,15 @@ public class LoginController extends BaseController {
                 DigestUtils.md5Hex(tokenString.toString()),
                 permissions,
                 DateUtils.addSeconds(new Date(), loginExpireSeconds)));
+
+        return Response.success();
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE)
+    public Response logout(String userName) {
+
+        //删除redis中cookie
+        userTokenService.delete(userName);
 
         return Response.success();
     }

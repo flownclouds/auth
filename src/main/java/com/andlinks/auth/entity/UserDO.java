@@ -13,9 +13,20 @@ import java.util.Set;
 @Where(clause="is_deleted=0")
 public class UserDO extends BaseEntity{
 
+    public enum Type{
+        //管理员
+        ADMIN,
+        //邀请码注册会员
+        INVITEDUSER,
+        //邀请码注册会员
+        UNINVITEDUSER
+    }
+
     private static final long serialVersionUID = 800549877275839591L;
 
     private String userName;
+
+    private UserDO.Type type;
 
     private String password;
 
@@ -28,6 +39,15 @@ public class UserDO extends BaseEntity{
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    @Column(name="type")
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     @Column(name="password")

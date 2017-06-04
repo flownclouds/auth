@@ -29,4 +29,9 @@ public class UserTokenImpl implements UserTokenService{
     public void delete(UserToken userToken) {
         userTokenDao.delete(userToken);
     }
+
+    @Override
+    public void delete(String userName) {
+        delete(userTokenDao.findOne(userName));
+    }
 }

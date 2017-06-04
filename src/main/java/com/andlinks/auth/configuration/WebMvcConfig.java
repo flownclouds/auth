@@ -30,6 +30,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/common/**")
                 .excludePathPatterns("*.html")
                 .excludePathPatterns("/error")
-                .excludePathPatterns("/login/");
+                .excludePathPatterns("/authentication");
     }
 }
